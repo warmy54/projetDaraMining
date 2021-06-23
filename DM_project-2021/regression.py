@@ -96,8 +96,17 @@ class LinearRegression_RidgeRegression():
         # make prediction                                                    #
         ######################################################################
         y_pred = np.zeros(X.shape[0],)
-        XPrime = np.concatenate((X,np.ones((X.shape[0],1))),axis=1)
-        y_pred = np.dot(XPrime,self.w)
+        W = self.w
+        if X.shape[1] < W.shape[0]:
+            X= np.concatenate((X,np.ones((X.shape[0],1))),axis=1)
+        y_pred = np.dot(X,self.w)
         return y_pred
+    
+    
+    
+    
+    
+    
+    
 
 
