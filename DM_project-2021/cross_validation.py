@@ -4,9 +4,9 @@ import numpy as np
 
 # usage in main part: cross_validation( Normal_X_train_valid_IC, y_train, Kfold = 10)
 
-def cross_validation(X_train, y_train, Analytic_Sol=True, sgd=False, Kfold = 10, l2r =10000):
+def cross_validation(X_train, y_train,n_col = 0,Analytic_Sol=True, sgd=False,iterations=100,lr=0.000001, Kfold = 10, l2r =10000):
 
-    y_tr_val = y_train[:,0]
+    y_tr_val = y_train[:,n_col]
     y_tr_val = np.reshape(y_tr_val,(y_tr_val.shape[0],1)) 
 
 
@@ -26,6 +26,7 @@ def cross_validation(X_train, y_train, Analytic_Sol=True, sgd=False, Kfold = 10,
         val_end = val_start + Xval_part_size
     #     print('start: ', val_start, ' , end: ', val_end)
         y_val = y_tr_val[val_start:val_end,0]
+
         Normal_X_valid_IC = X_train[val_start:val_end,:]
 
         y_tr = np.concatenate((y_tr_val[0:val_start,0],y_tr_val[val_end:n_train_valid,0]))
@@ -35,8 +36,7 @@ def cross_validation(X_train, y_train, Analytic_Sol=True, sgd=False, Kfold = 10,
         y_tr = np.reshape(y_tr,(y_tr.shape[0],1)) # we change the shape of y_tr from (m,) to (m,1)
 
 
-        model=LinearRegression_RidgeRegression(Normal_X_train_IC, y_tr, iterations=500,lr=0.0001,l2_reg=l2r, 
-                                                  analytical_sol=Analytic_Sol, SGD=sgd, BatchNumber= int(Normal_X_train_IC.shape[0]/10))
+        model=LinearRegression_RidgeRegression(Normal_X_train_IC,          y_tr,iterations=iterations,lr=lr,l2_reg=l2r,analytical_sol=Analytic_Sol, SGD=sgd, BatchNumber= int(Normal_X_train_IC.shape[0]/10))
 
 
     #     print('Normal_X_train_IC shape: ',Normal_X_train_IC.shape)
@@ -69,7 +69,7 @@ def cross_validation(X_train, y_train, Analytic_Sol=True, sgd=False, Kfold = 10,
     #     print('y_tr: ', y_tr)
         if (i > n_Xval_parts):
             break
-        return model
+    return best_validation_model
 
 
    
